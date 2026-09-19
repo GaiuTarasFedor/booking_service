@@ -84,8 +84,10 @@ celerybeat-schedule
 celerybeat.pid
 # SageMath parsed files
 *.sage.py
-# Environments
+# Environments / секреты
 .env
+.env.*
+!.env.example
 .venv_dir
 .venv
 env/
@@ -106,6 +108,9 @@ venv.bak/
 dmypy.json
 # Pyre type checker
 .pyre/
-# Static files
-static
+# Django: собираемые и генерируемые артефакты
+/staticfiles/
+/media/
+db.sqlite3
+db.sqlite3-journal
 postgresQL.txt
