@@ -85,8 +85,13 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("PG_NAME"),
+        "USER": env("PG_USER"),
+        "PASSWORD": env("PG_PASS"),
+        "HOST": env("PG_HOST"),
+        "PORT": env.int("PG_PORT", default=5432),
+        # "CONN_MAX_AGE": 60, # держать соединение с БД открытым до 60 секунд вместо закрытия после каждого запроса
     }
 }
 
