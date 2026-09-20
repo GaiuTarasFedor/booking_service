@@ -1,0 +1,31 @@
+{% extends "booking_manager/base.html" %}
+
+{% block title %}Доступные слоты{% endblock %}
+
+{% block content %}
+    <h1>Доступные временные слоты</h1>
+    <p>Всего слотов: {{ total }}.</p>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Час</th>
+                <th>Услуга</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for slot in slots %}
+                <tr>
+                    <td>{{ slot.start }}&ndash;{{ slot.end }}</td>
+                    <td>{{ slot.service }}</td>
+                    <td>{{ slot.is_free|yesno:"свободен,занят" }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">Слотов нет — посмотрите другой день.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
