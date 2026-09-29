@@ -5,6 +5,9 @@
 """
 from django.shortcuts import render
 
+from .data import SERVICES, SPECIALISTS, BOOKINGS, TIME_SLOTS
+
+
 def index(request):
     """Главная страница: что это за сервис и какую задачу он решает."""
     return render(request, "booking_manager/index.html")
@@ -25,4 +28,31 @@ def slot_list(request):
         request,
         "booking_manager/slots.html",
         {"slots": slots, "total": len(slots)},
+    )
+
+
+def service_list(request):
+    """Список доступных услуг."""
+    return render(
+        request,
+        "booking_manager/services.html",
+        {"services": SERVICES}
+    )
+
+
+def specialist_list(request):
+    """Список специалистов."""
+    return render(
+        request,
+        "booking_manager/specialists.html",
+        {"specialists": SPECIALISTS}
+    )
+
+
+def booking_list(request):
+    """Запись клиентов."""
+    return render(
+        request,
+        "booking_manager/bookings.html",
+        {"bookings": BOOKINGS}
     )
