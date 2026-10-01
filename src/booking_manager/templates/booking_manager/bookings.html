@@ -13,12 +13,14 @@
                 <p class="card-text">Date: {{ booking.date }}</p>
                 <p class="card-text">Time: {{ booking.time }}</p>
                     {% if booking.status == "confirmed" %}
-                        <span class="badge bg-success">Confirmed</span>
+                        <span class="badge text-bg-success">Confirmed</span>
                     {% elif booking.status == "pending" %}
-                        <span class="badge bg-warning text-dark">Pending</span>
+                        <span class="badge text-bg-warning text-dark">Pending</span>
                     {% elif booking.status == "cancelled" %}
-                        <span class="badge bg-danger">Cancelled</span>
+                        <span class="badge text-bg-danger text-dark">Cancelled</span>
                     {% endif %}
+                <a href="#" class="btn btn-primary btn-sm">View</a>
+                <a href="#" class="btn btn-danger btn-sm">Cancel</a>
             </div>
         </div>
     {% endfor %}

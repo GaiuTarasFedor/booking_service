@@ -8,9 +8,9 @@ from django.shortcuts import render
 from .data import SERVICES, SPECIALISTS, BOOKINGS, TIME_SLOTS
 
 
-def index(request):
+def home(request):
     """Главная страница: что это за сервис и какую задачу он решает."""
-    return render(request, "booking_manager/index.html")
+    return render(request, "booking_manager/home.html")
 
 
 def slot_list(request):
@@ -55,4 +55,12 @@ def booking_list(request):
         request,
         "booking_manager/bookings.html",
         {"bookings": BOOKINGS}
+    )
+
+
+def booking_new(request):
+    """Страница создания нового бронирования."""
+    return render(
+        request,
+        "booking_manager/booking_new.html",
     )

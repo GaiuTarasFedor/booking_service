@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # custom_app
     "booking_manager",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
