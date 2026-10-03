@@ -1,14 +1,38 @@
 # Booking service
-Сервис бронирования свободных временных слотов.
+
+Учебный проект на Django: сервис бронирования услуг (барбершоп).
+Данные пока демонстрационные (в `data.py`), модели и работу с БД добавим позже.
 
 ## Стек
-Python 3.14, Django 6.1, PostgreSQL 18, Poetry, django-environ, psycopg 3.
+Python 3.14, Django 6.1, PostgreSQL 18, Poetry, django-environ, psycopg 3, Bootstrap 5 (CDN).
+
+## Страницы
+| Адрес | Имя маршрута | Назначение |
+|---|---|---|
+| `/` | `booking_manager:home` | Главная: hero-блок, описание, кнопка Book Now |
+| `/services/` | `booking_manager:services` | Услуги (Bootstrap-карточки) |
+| `/specialists/` | `booking_manager:specialists` | Специалисты (карточки) |
+| `/bookings/` | `booking_manager:bookings` | Бронирования: badge статусов, кнопки View/Cancel |
+| `/bookings/new/` | `booking_manager:booking_new` | Форма нового бронирования + карточка Booking Information |
+| `/admin/` | `admin:index` | Админка Django |
 
 ## Структура
 src/                — точка импорта (sys.path), а не корень репозитория
     manage.py
     core/            — конфигурация проекта (settings/urls/wsgi/asgi)
-    booking_manager/  — приложение: маршруты, представления, шаблоны
+    booking_manager/  — приложение
+        data.py       — демонстрационные данные: SERVICES, SPECIALISTS, BOOKINGS, TIME_SLOTS
+        urls.py       — маршруты приложения (app_name = booking_manager)
+        views.py      — представления (home, service_list, specialist_list, booking_list, booking_new)
+        templates/booking_manager/
+            base.html          — общий каркас: Bootstrap 5, {% block %}
+            navbar.html        — навигация (подключён через {% include %})
+            footer.html        — футер: проект, {% now "Y" %}, Contacts/About/Admin
+            home.html          — главная страница
+            services.html      — список услуг
+            specialists.html   — список специалистов
+            bookings.html      — список бронирований
+            booking_new.html   — форма нового бронирования
 
 ## Запуск с нуля
 1. git clone ... && cd booking_service
