@@ -1,0 +1,41 @@
+            {% extends "booking_manager/base.html" %}
+
+{% block title %}New Booking{% endblock %}
+
+{% block content %}
+<h2>New Booking</h2>
+<div class="container">
+    <div class="row">
+       <div class="col-md-8">
+           <form>
+                <div class="mb-3">
+                    <label class="form-label">Client name</label>
+                    <input type="text" class="form-control" placeholder="Enter client name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Service</label>
+                    <input type="text" class="form-control" placeholder="Enter service name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Date</label>
+                    <input type="text" class="form-control" placeholder="Enter date">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Time</label>
+                    <input type="text" class="form-control" placeholder="Enter time">
+                </div>
+                    <button type="submit" class="btn btn-primary">Book</button>
+           </form>
+       </div>
+       <div class="col-md-4">
+           <div class="card">
+                <div class="card-body">
+                     <h5 class="card-title">Booking Information</h5>
+                     <p class="card-text">Здесь размещена информация о порядке и способе записи клиента на услугу</p>
+                </div>
+           </div>
+       </div>
+    </div>
+</div>
+
+{% endblock %}
