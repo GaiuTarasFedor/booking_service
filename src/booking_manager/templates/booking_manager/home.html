@@ -1,19 +1,13 @@
 {% extends "booking_manager/base.html" %}
 
-{% block title %}Про сервис{% endblock %}
+{% block title %}Booking System{% endblock %}
 
 {% block content %}
-    <h1>Booking service</h1>
-    <p>Сервис бронирования свободных временных слотов.</p>
-
-    <h2>Задача сервиса</h2>
-    <ul>
-        <li>показать доступные временные слоты;</li>
-        <li>разрешить забронировать конкретный слот;</li>
-        <li>не допустить повторного бронивания одного и того же слота.</li>
-    </ul>
-
-    <p>
-        <a href="{% url 'booking_manager:slot_list' %}">Перейти к списку слотов</a>
-    </p>
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold text-body-emphasis">Booking System</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Сервис услуг барбершопа</p>
+        <a href="{% url 'booking_manager:booking_new' %}" class="btn btn-primary btn-lg px-4">Book Now</a>
+    </div>
+</div>
 {% endblock %}
