@@ -1,7 +1,5 @@
 """В этом модуле собран класс демонстрирующий ORM-запросы к базе данных."""
 
-from datetime import datetime, timedelta
-
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
@@ -82,7 +80,7 @@ class Command(BaseCommand):
 
         print("\n")
         self.stdout.write("Задание №10: созданные сегодня")
-        # 
+        # обновил дату для реализации запроса
         Booking.objects.exclude(
             name__in=["стрижка БОРОДЫ", "Покраска волос"],
         ).update(created_at=timezone.now()
