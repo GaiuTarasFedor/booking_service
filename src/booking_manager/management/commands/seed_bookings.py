@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from decimal import Decimal
 
-from booking_manager.models import Booking
+from ...models import Booking
 
 
 BOOKINGS = [
@@ -82,7 +82,9 @@ BOOKINGS = [
 
 
 class Command(BaseCommand):
-    help = "Создаёт 10 записей Booking для ДЗ №3 (идемпотентно)"
+    """Создаёт 10 записей Booking для ДЗ №3 (идемпотентно)."""
+
+    help = "Создаёт 10 записей Booking для ДЗ №3 (идемпотентно)."
 
     def handle(self, *args, **options):
         created_count = 0
