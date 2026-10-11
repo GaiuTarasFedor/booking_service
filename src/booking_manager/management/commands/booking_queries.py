@@ -82,6 +82,11 @@ class Command(BaseCommand):
 
         print("\n")
         self.stdout.write("Задание №10: созданные сегодня")
+        # 
+        Booking.objects.exclude(
+            name__in=["стрижка БОРОДЫ", "Покраска волос"],
+        ).update(created_at=timezone.now()
+        )
         qs = Booking.objects.filter(created_at__date=timezone.localdate())
         for n, b in enumerate(qs, 1):
             self.stdout.write(f"  {n}. id{b.id}: {b.name}, {b.category}")
