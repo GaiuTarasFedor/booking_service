@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.postgres", # добавил движок postgresql, как понял - улучшить поиск по имени
+    # PostgreSQL-специфичные фичи: полнотекстовый поиск, ArrayField.
+    "django.contrib.postgres",
     # custom_app
     "booking_manager",
     "django_extensions",
