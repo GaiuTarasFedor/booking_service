@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "debug_toolbar",
     # PostgreSQL-специфичные фичи: полнотекстовый поиск, ArrayField.
     "django.contrib.postgres",
     # custom_app
@@ -61,10 +62,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
 ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
@@ -130,6 +131,10 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 
 # Static files (CSS, JavaScript, Images)
