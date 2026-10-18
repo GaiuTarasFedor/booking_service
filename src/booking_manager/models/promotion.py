@@ -35,7 +35,7 @@ class Comment(BaseModel):
 
     is_active = models.BooleanField(
         default=True,
-        verbose_name="активный",
+        verbose_name="активная",
     )
 
     services = models.ManyToManyField(
