@@ -28,17 +28,17 @@ class Comment(BaseModel):
         verbose_name="клиент",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="clients",
+        related_name="comments",
     )
 
     barber_id = models.OneToOneField(
         to="account.Barber",
         verbose_name="Барбер",
         on_delete=models.CASCADE,
-        related_name="barber",
+        related_name="comments",
     )
 
-    booking = models.OneToOneField(
+    booking_id = models.OneToOneField(
         to="Booking",
         verbose_name="Бронирование",
         on_delete=models.CASCADE,

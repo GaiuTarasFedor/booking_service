@@ -37,7 +37,7 @@ class Booking(BaseModel):
         to="account.Barber",
         verbose_name="Барбер",
         on_delete=models.SET_NULL,
-        related_name="barbers",
+        related_name="bookings",
         null=True,
     )
 
@@ -45,7 +45,7 @@ class Booking(BaseModel):
         to="BarberShop",
         verbose_name="Офис",
         on_delete=models.SET_NULL,
-        related_name="barbershop",
+        related_name="bookings",
         null=True,
     )
 
@@ -53,7 +53,7 @@ class Booking(BaseModel):
         to="account.Client",
         verbose_name="клиент",
         on_delete=models.CASCADE,
-        related_name="client",
+        related_name="bookings",
     )
 
     def __str__(self):

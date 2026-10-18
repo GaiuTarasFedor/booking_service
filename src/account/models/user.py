@@ -46,6 +46,8 @@ class User(AbstractUser, BaseModel):
         unique=True,
     )
 
+    REQUIRED_FIELDS = []
+
     USERNAME_FIELD = "email"
 
     objects = UserManager()

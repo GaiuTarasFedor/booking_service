@@ -18,7 +18,7 @@ class ProductBooking(BaseModel):
         to="Product",
         verbose_name="используемые товары",
         on_delete=models.CASCADE,
-        related_name="products",
+        related_name="product_bookings",
         null=True,
     )
 

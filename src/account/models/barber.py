@@ -26,7 +26,7 @@ class Barber(BaseModel):
     )
 
     barber_shop_id = models.ForeignKey(
-        to="barber_shop.BarberShop",
+        to="booking_manager.BarberShop",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
