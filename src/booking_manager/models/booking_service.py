@@ -51,11 +51,11 @@ class BookingService(BaseModel):
     class Meta:
         db_table = "booking_service"
         verbose_name = "услуга"
-        # В дополнение к валидации Python добил валидацию в БД
+        # В дополнение к валидации Python добавил валидацию в БД
         constraints = [
             models.CheckConstraint(
                 condition=models.Q(price__gte=0),
-                name="price_non_negative",
+                name="price",
                 violation_error_message="Цена не может быть меньше 0.",
             )
         ]

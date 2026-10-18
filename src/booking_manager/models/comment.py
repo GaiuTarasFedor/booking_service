@@ -24,7 +24,7 @@ class Comment(BaseModel):
     )
 
     client_id = models.OneToOneField(
-        to="account.models.client.Client",
+        to="account.Client",
         verbose_name="клиент",
         on_delete=models.SET_NULL,
         null=True,
@@ -32,10 +32,10 @@ class Comment(BaseModel):
     )
 
     barber_id = models.OneToOneField(
-        to="account.models.barber.Barber",
+        to="account.Barber",
         verbose_name="Барбер",
         on_delete=models.CASCADE,
-        related_name="barbers",
+        related_name="barber",
     )
 
     booking = models.OneToOneField(
@@ -47,7 +47,7 @@ class Comment(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.id} - {self.booking}"
 
     class Meta:
         verbose_name = "комментарий"

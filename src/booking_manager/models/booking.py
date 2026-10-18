@@ -34,7 +34,7 @@ class Booking(BaseModel):
     )
 
     barber_id = models.ForeignKey(
-        to="account.models.barber.Barber",
+        to="account.Barber",
         verbose_name="Барбер",
         on_delete=models.SET_NULL,
         related_name="barbers",
@@ -50,10 +50,10 @@ class Booking(BaseModel):
     )
 
     client_id = models.ForeignKey(
-        to="account.models.client.Client",
+        to="account.Client",
         verbose_name="клиент",
         on_delete=models.CASCADE,
-        related_name="clients",
+        related_name="client",
     )
 
     def __str__(self):
