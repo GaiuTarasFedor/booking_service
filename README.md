@@ -2,7 +2,7 @@
 
 Учебный проект на Django: сервис бронирования услуг барбершопа.
 
-Модель `Booking`, миграции и работа с PostgreSQL реализованы: данные наполняются командой
+Модель `booking.py`, миграции и работа с PostgreSQL реализованы: данные наполняются командой
 `seed_bookings`, запросы к БД демонстрирует команда `booking_queries`, мутации покрыты тестами.
 Веб-страницы пока работают на демонстрационных данных из `data.py` и с базой не связаны —
 их перевод на QuerySet запланирован отдельно.
@@ -52,7 +52,7 @@ django-extensions, `django.contrib.postgres`, Bootstrap 5 (CDN).
 | `/specialists/` | `booking_manager:specialists` | Специалисты (карточки) |
 | `/bookings/` | `booking_manager:bookings` | Бронирования: badge статусов, кнопки View/Cancel |
 | `/bookings/new/` | `booking_manager:booking_new` | Форма нового бронирования (только разметка) |
-| `/admin/` | `admin:index` | Админка Django, модель `Booking` зарегистрирована |
+| `/admin/` | `admin:index` | Админка Django, модель `booking.py` зарегистрирована |
 
 ## Структура
 
