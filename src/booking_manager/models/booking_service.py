@@ -40,7 +40,7 @@ class BookingService(BaseModel):
         validators=[MinValueValidator(0)],
     )
 
-    durations_minutes = models.PositiveIntegerField(
+    duration_minutes = models.PositiveIntegerField(
         verbose_name="продолжительность в минутах",
         null=True,
         blank=True,

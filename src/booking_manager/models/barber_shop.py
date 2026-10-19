@@ -52,5 +52,5 @@ class BarberShop(BaseModel):
     class Meta:
         verbose_name = "офис"
         verbose_name_plural = "офисы"
-        db_table = "barbers_shop"
+        db_table = "barber_shops"
         ordering = ["-id", "name"]

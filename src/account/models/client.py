@@ -7,7 +7,7 @@ from account.constants import ClientStatusChoices
 class Client(BaseModel):
     """Класс (таблица) клиента."""
 
-    name = models.CharField(
+    status = models.CharField(
         choices=ClientStatusChoices.choices,
         default=ClientStatusChoices.NOOB,
         verbose_name="статус",

@@ -6,7 +6,7 @@ from core.models import BaseModel
 class Barber(BaseModel):
     """Класс (таблица) барберов."""
 
-    experience_years = models.PositiveIntegerField(
+    experience_year = models.PositiveIntegerField(
         verbose_name="опыт работы",
         null=True,
         blank=True,

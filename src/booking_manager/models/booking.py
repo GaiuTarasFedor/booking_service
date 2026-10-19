@@ -26,7 +26,7 @@ class Booking(BaseModel):
 
     is_active = models.BooleanField(default=True, verbose_name="активна")
 
-    booking_services = models.ForeignKey(
+    booking_service = models.ForeignKey(
         to="BookingService",
         verbose_name="услуга",
         on_delete=models.CASCADE,
