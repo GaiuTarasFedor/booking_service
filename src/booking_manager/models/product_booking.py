@@ -14,7 +14,7 @@ class ProductBooking(BaseModel):
         verbose_name="id", default=uuid.uuid4, primary_key=True, editable=False
     )
 
-    product_id = models.ForeignKey(
+    product = models.ForeignKey(
         to="Product",
         verbose_name="используемые товары",
         on_delete=models.CASCADE,
@@ -22,7 +22,7 @@ class ProductBooking(BaseModel):
         null=True,
     )
 
-    booking_id = models.ForeignKey(
+    booking = models.ForeignKey(
         to="Booking",
         verbose_name="Бронирование",
         on_delete=models.CASCADE,

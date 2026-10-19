@@ -1,7 +1,8 @@
 from django.db import models
+from django.db.models.deletion import SET_DEFAULT
 
 from core.models import BaseModel
-
+from booking_manager.constants import CategoryChoices
 
 class Booking(BaseModel):
     """Класс (таблица) бронирования услуг."""
@@ -25,23 +26,23 @@ class Booking(BaseModel):
 
     is_active = models.BooleanField(default=True, verbose_name="активна")
 
-    booking_services_id = models.ForeignKey(
+    booking_services = models.ForeignKey(
         to="BookingService",
         verbose_name="услуга",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
+        default=CategoryChoices.SERVICE_HAIRCUT,
         related_name="bookings",
         null=True,
     )
 
-    barber_id = models.ForeignKey(
+    barber = models.ForeignKey(
         to="account.Barber",
         verbose_name="Барбер",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="bookings",
-        null=True,
     )
 
-    barber_shop_id = models.ForeignKey(
+    barber_shop = models.ForeignKey(
         to="BarberShop",
         verbose_name="Офис",
         on_delete=models.SET_NULL,
@@ -49,7 +50,7 @@ class Booking(BaseModel):
         null=True,
     )
 
-    client_id = models.ForeignKey(
+    client = models.ForeignKey(
         to="account.Client",
         verbose_name="клиент",
         on_delete=models.CASCADE,

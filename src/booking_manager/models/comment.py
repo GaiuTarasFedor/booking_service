@@ -23,27 +23,26 @@ class Comment(BaseModel):
         verbose_name="активный",
     )
 
-    client_id = models.OneToOneField(
+    client = models.ForeignKey(
         to="account.Client",
         verbose_name="клиент",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         related_name="comments",
     )
 
-    barber_id = models.OneToOneField(
+    barber = models.ForeignKey(
         to="account.Barber",
         verbose_name="Барбер",
         on_delete=models.CASCADE,
         related_name="comments",
     )
 
-    booking_id = models.OneToOneField(
+    booking = models.OneToOneField(
         to="Booking",
         verbose_name="Бронирование",
         on_delete=models.CASCADE,
         related_name="comment",
-        unique=True
     )
 
     def __str__(self):

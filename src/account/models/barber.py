@@ -18,18 +18,16 @@ class Barber(BaseModel):
         blank=True,
     )
 
-    user_id = models.OneToOneField(
+    user = models.OneToOneField(
         to="User",
         on_delete=models.CASCADE,
         verbose_name="барбер",
         related_name="barber",
     )
 
-    barber_shop_id = models.ForeignKey(
+    barber_shop = models.ForeignKey(
         to="booking_manager.BarberShop",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        on_delete=models.CASCADE,
         verbose_name="барбершоп",
         related_name="barbers",
     )

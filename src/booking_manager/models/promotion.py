@@ -3,7 +3,7 @@ from django.db import models
 from core.models import BaseModel
 
 
-class Comment(BaseModel):
+class Promotion(BaseModel):
     """Класс для хранения акций."""
 
     name = models.CharField(
@@ -42,7 +42,6 @@ class Comment(BaseModel):
         to="BookingService",
         verbose_name="скидка",
         related_name="promotions",
-        through="PromotionService",
     )
 
     def __str__(self):

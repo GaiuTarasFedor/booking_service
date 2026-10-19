@@ -17,7 +17,7 @@ class Client(BaseModel):
         verbose_name="дата рождения",
     )
 
-    user_id = models.OneToOneField(
+    user = models.OneToOneField(
         to="User",
         on_delete=models.CASCADE,
         verbose_name="пользователь",
