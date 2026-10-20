@@ -46,9 +46,8 @@ class Booking(BaseModel):
     barbershop = models.ForeignKey(
         to="BarberShop",
         verbose_name="Офис",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="bookings",
-        null=True,
     )
 
     client = models.ForeignKey(
