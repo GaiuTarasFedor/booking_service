@@ -15,23 +15,24 @@ class UserQuerySet(models.QuerySet):
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, email, password, **kwargs):
-        user = self.model(email=email, **kwargs)
+    """Создаем шаблон пользователя/суперпользователя."""
+
+    def _create_user(self, email, password=None, **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
         user.password = make_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
-    def create_user(self, email, password):
-        return self._create_user(email, password)
+    def create_user(self, email, password, **extra_fields):
+        return self._create_user(email, password, **extra_fields)
 
     # def all_superuser(self):
     #     return self._create_user(is_superuser=True)
 
-    def create_superuser(self, email, password):
-        kwargs = {
-            'is_superuser': True,
-            'is_staff': True,
-                  }
-        return self._create_user(email, password, **kwargs)
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_staff", True)  # только если ключа нет
+        extra_fields.setdefault("is_superuser", True)  # только если ключа нет
+        return self._create_user(email, password, **extra_fields)
 
 
