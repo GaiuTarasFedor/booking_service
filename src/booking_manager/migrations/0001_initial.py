@@ -280,7 +280,6 @@ class Migration(migrations.Migration):
                 (
                     "booking_service",
                     models.ForeignKey(
-                        default="haircut",
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="bookings",

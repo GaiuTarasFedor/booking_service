@@ -19,7 +19,6 @@ class ProductBooking(BaseModel):
         verbose_name="используемые товары",
         on_delete=models.CASCADE,
         related_name="product_bookings",
-        null=True,
     )
 
     booking = models.ForeignKey(
@@ -27,7 +26,6 @@ class ProductBooking(BaseModel):
         verbose_name="Бронирование",
         on_delete=models.CASCADE,
         related_name="product_bookings",
-        null=True,
     )
 
     quantity = models.PositiveIntegerField(
@@ -54,6 +52,7 @@ class ProductBooking(BaseModel):
                 violation_error_message="Итоговая цена не может быть меньше 0.",
             )
         ]
+    ordering = ["created_at", "quantity"]
 
     def __str__(self):
-        return f"{self.product_id} — {self.quantity} шт."
+        return f"{self.product} — {self.quantity} шт."

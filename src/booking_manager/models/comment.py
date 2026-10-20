@@ -12,7 +12,7 @@ class Comment(BaseModel):
         blank=True,
     )
 
-    rating = models.PositiveIntegerField(
+    rating = models.PositiveSmallIntegerField(
         verbose_name="рейтинг",
         null=True,
         blank=True,
@@ -27,7 +27,6 @@ class Comment(BaseModel):
         to="account.Client",
         verbose_name="клиент",
         on_delete=models.CASCADE,
-        null=True,
         related_name="comments",
     )
 
@@ -46,10 +45,10 @@ class Comment(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.id} - {self.booking}"
+        return f"{self.barber} - {self.rating}"
 
     class Meta:
         verbose_name = "комментарий"
         verbose_name_plural = "комментарии"
         db_table = "comments"
-        ordering = ["-id", "rating"]
+        ordering = ["-created_at", "-rating"]

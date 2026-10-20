@@ -15,6 +15,7 @@ class BookingService(BaseModel):
     )
 
     category = models.CharField(
+        max_length=10,
         choices=CategoryChoices,
         verbose_name="категория",
         default=CategoryChoices.SERVICE_HAIRCUT,
@@ -60,7 +61,7 @@ class BookingService(BaseModel):
             )
         ]
         # как я понял запись должна идти по уникальным позициям таблицы:
-        ordering = ["-created_at", "id", "name"]
+        ordering = ["-created_at", "name"]
 
     def __str__(self):
         return self.name

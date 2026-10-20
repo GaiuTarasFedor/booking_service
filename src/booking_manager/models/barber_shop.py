@@ -3,7 +3,7 @@ from django.db import models
 from core.models import BaseModel
 
 
-class BarberShop(BaseModel):
+class Barbershop(BaseModel):
     """Класс для хранения информации о барбершопе и его местонахождении."""
 
     name = models.CharField(
@@ -52,5 +52,5 @@ class BarberShop(BaseModel):
     class Meta:
         verbose_name = "офис"
         verbose_name_plural = "офисы"
-        db_table = "barber_shops"
+        db_table = "barbershops"
         ordering = ["-id", "name"]

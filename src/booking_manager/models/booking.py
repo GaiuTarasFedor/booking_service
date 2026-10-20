@@ -24,15 +24,16 @@ class Booking(BaseModel):
         blank=True,
     )
 
-    is_active = models.BooleanField(default=True, verbose_name="активна")
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="активна",
+    )
 
     booking_service = models.ForeignKey(
         to="BookingService",
         verbose_name="услуга",
         on_delete=models.CASCADE,
-        default=CategoryChoices.SERVICE_HAIRCUT,
         related_name="bookings",
-        null=True,
     )
 
     barber = models.ForeignKey(
@@ -42,7 +43,7 @@ class Booking(BaseModel):
         related_name="bookings",
     )
 
-    barber_shop = models.ForeignKey(
+    barbershop = models.ForeignKey(
         to="BarberShop",
         verbose_name="Офис",
         on_delete=models.SET_NULL,

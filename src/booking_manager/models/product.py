@@ -41,13 +41,6 @@ class Product(BaseModel):
         default=0,
     )
 
-    bookings = models.ManyToManyField(
-        to="Booking",
-        verbose_name="бронирования",
-        related_name="products",
-        through="ProductBooking",
-    )
-
     class Meta:
         db_table = "product"
         verbose_name = "товар"
@@ -59,7 +52,7 @@ class Product(BaseModel):
                 violation_error_message="Цена не может быть меньше 0.",
             )
         ]
-        ordering = ["created_at", "id", "-amount"]
+        ordering = ["created_at", "-amount"]
 
     def __str__(self):
         return self.name

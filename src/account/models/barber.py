@@ -25,7 +25,7 @@ class Barber(BaseModel):
         related_name="barber",
     )
 
-    barber_shop = models.ForeignKey(
+    barbershop = models.ForeignKey(
         to="booking_manager.BarberShop",
         on_delete=models.CASCADE,
         verbose_name="барбершоп",
