@@ -12,6 +12,7 @@ class BookingService(BaseModel):
     id = models.BigAutoField(
         verbose_name="id",
         primary_key=True,
+        auto_created=True,
     )
 
     category = models.CharField(
@@ -47,7 +48,10 @@ class BookingService(BaseModel):
         blank=True,
     )
 
-    is_active = models.BooleanField(default=True, verbose_name="активна")
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="активна",
+    )
 
     class Meta:
         db_table = "booking_service"
