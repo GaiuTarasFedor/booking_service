@@ -1,9 +1,5 @@
 from django.contrib import admin
-from .models import Booking
+from django.contrib.auth.admin import UserAdmin
+from account.models.user import User
 
-
-@admin.register(Booking)
-class BookingAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "category", "price", "visit_time", "created_at"]
-    list_filter = ["category", "visit_time", "is_active", "created_at"]
-    search_fields = ["name",]
+admin.site.register(User, UserAdmin)

@@ -20,10 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # .../booking_service — корень репозитория, где лежит .env
 ROOT_DIR = BASE_DIR.parent
 
-env = environ.Env(
-    DEBUG=(bool, False),
-    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"])
-)
+env = environ.Env(DEBUG=(bool, False), ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]))
 
 environ.Env.read_env(ROOT_DIR / ".env")
 
@@ -54,6 +51,7 @@ INSTALLED_APPS = [
     # custom_app
     "booking_manager",
     "django_extensions",
+    "account",
 ]
 
 MIDDLEWARE = [
@@ -120,6 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "account.User"
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/

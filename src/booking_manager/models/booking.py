@@ -1,41 +1,21 @@
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.db.models.deletion import SET_DEFAULT
 
-from ..constants import CategoryChoices
+from core.models import BaseModel
+from booking_manager.constants import CategoryChoices
 
+class Booking(BaseModel):
+    """Класс (таблица) бронирования услуг."""
 
-class Booking(models.Model):
-    """Создаем таблицу бронирований мастеров в БД"""
+    id = models.BigAutoField(
+        verbose_name="Id",
+        primary_key=True,
+    )
+
     name = models.CharField(
-        max_length=50,
+        max_length=30,
         verbose_name="наименование",
         unique=True,
-    )
-
-    # не поставил max_length - по документации он игнорируется если TextField (если я правильно понял)
-    description = models.TextField(
-        verbose_name="описание",
-        blank=True,
-    )
-
-    # использовал Decimal в связи со спецификой округлений и расчетов в Float
-    price = models.DecimalField(
-        verbose_name="цена",
-        max_digits=8,
-        decimal_places=2,
-        validators=[MinValueValidator(0)],
-    )
-
-    category = models.CharField(
-        max_length=10,
-        choices=CategoryChoices,
-        verbose_name="категория",
-        default=CategoryChoices.SERVICE_HAIRCUT,
-    )
-
-    is_active = models.BooleanField(
-        default=True,
-        verbose_name="активна"
     )
 
     visit_time = models.DateTimeField(
@@ -44,27 +24,43 @@ class Booking(models.Model):
         blank=True,
     )
 
-    created_at = models.DateTimeField(
-        verbose_name="Время создания записи",
-        auto_now_add=True,
-    )
-    updated_at = models.DateTimeField(
-        verbose_name="Время изменения записи",
-        auto_now=True,
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="активна",
     )
 
-    class Meta:
-        db_table = "booking"
-        verbose_name = "бронирование мастера"
-        verbose_name_plural = "бронирования мастеров"
-        # В дополнение к валидации Python добил валидацию в БД
-        constraints = [models.CheckConstraint(
-            condition=models.Q(price__gte=0),
-            name="price_non_negative",
-            violation_error_message="Цена не может быть меньше 0."
-        )]
-        # как я понял запись должна идти по уникальным позициям таблицы:
-        ordering = ["-created_at", "id"]
+    booking_service = models.ForeignKey(
+        to="BookingService",
+        verbose_name="услуга",
+        on_delete=models.CASCADE,
+        related_name="bookings",
+    )
+
+    barber = models.ForeignKey(
+        to="account.Barber",
+        verbose_name="Барбер",
+        on_delete=models.CASCADE,
+        related_name="bookings",
+    )
+
+    barbershop = models.ForeignKey(
+        to="BarberShop",
+        verbose_name="Офис",
+        on_delete=models.CASCADE,
+        related_name="bookings",
+    )
+
+    client = models.ForeignKey(
+        to="account.Client",
+        verbose_name="клиент",
+        on_delete=models.CASCADE,
+        related_name="bookings",
+    )
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        db_table = "bookings"
+        verbose_name = "Бронирование мастера"
+        ordering = ["-created_at", "name"]
