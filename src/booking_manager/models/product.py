@@ -10,7 +10,6 @@ class Product(BaseModel):
     id = models.AutoField(
         verbose_name="id",
         primary_key=True,
-        auto_created=True,
     )
 
     name = models.CharField(

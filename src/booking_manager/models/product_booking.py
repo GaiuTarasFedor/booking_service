@@ -11,7 +11,10 @@ class ProductBooking(BaseModel):
 
     # решил создать свой id, не по умолчанию
     id = models.UUIDField(
-        verbose_name="id", default=uuid.uuid4, primary_key=True, editable=False
+        verbose_name="id",
+        default=uuid.uuid4,
+        primary_key=True,
+        editable=False
     )
 
     product = models.ForeignKey(

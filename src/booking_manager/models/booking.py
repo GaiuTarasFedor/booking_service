@@ -10,7 +10,6 @@ class Booking(BaseModel):
     id = models.BigAutoField(
         verbose_name="Id",
         primary_key=True,
-        auto_created=True,
     )
 
     name = models.CharField(

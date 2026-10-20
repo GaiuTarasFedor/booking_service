@@ -12,7 +12,6 @@ class BookingService(BaseModel):
     id = models.BigAutoField(
         verbose_name="id",
         primary_key=True,
-        auto_created=True,
     )
 
     category = models.CharField(

@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
 from decimal import Decimal
 
@@ -30,7 +31,7 @@ BOOKINGSERVICE = [
     {
         "category": "haircut",
         "name": "Супермодель",
-        "description": "мойка головы, стрижка, укаладка",
+        "description": "мойка головы, стрижка, укладка",
         "price": Decimal("75"),
         "duration_minutes": 30,
         "is_active": True,
@@ -54,7 +55,7 @@ BOOKINGSERVICE = [
     {
         "category": "kids",
         "name": "Младенец",
-        "description": "мойка головы, стрижка, укаладка",
+        "description": "мойка головы, стрижка, укладка",
         "price": Decimal("101"),
         "duration_minutes": 20,
         "is_active": True,
@@ -62,7 +63,7 @@ BOOKINGSERVICE = [
     {
         "category": "camouflage",
         "name": "Серебро",
-        "description": "мойка головы, стрижка, укаладка",
+        "description": "мойка головы, укладка",
         "price": Decimal("75"),
         "duration_minutes": 40,
         "is_active": True,
@@ -70,7 +71,7 @@ BOOKINGSERVICE = [
     {
         "category": "royal",
         "name": "Корона",
-        "description": "мойка головы, стрижка, укаладка",
+        "description": "мойка головы, стрижка, укладка",
         "price": Decimal("99"),
         "duration_minutes": 50,
         "is_active": True,
@@ -78,7 +79,7 @@ BOOKINGSERVICE = [
     {
         "category": "shave",
         "name": "Слалом",
-        "description": "мойка головы, стрижка, укаладка",
+        "description": "мойка головы, стрижка",
         "price": Decimal("10"),
         "duration_minutes": 45,
         "is_active": True,
@@ -86,7 +87,7 @@ BOOKINGSERVICE = [
     {
         "category": "combo",
         "name": "Юниверсал",
-        "description": "мойка головы, стрижка, укладка",
+        "description": "мойка головы, бритье, укладка",
         "price": Decimal("75"),
         "duration_minutes": 40,
         "is_active": True,
@@ -114,7 +115,7 @@ PRODUCT = [
     },
     {
         "name": "Крем после бритья",
-        "description": "очень хорошо защщает кожу",
+        "description": "очень хорошо защищает кожу",
         "amount": 20,
         "price": Decimal("10"),
     },
@@ -125,14 +126,14 @@ PRODUCT = [
         "price": Decimal("10"),
     },
     {
-        "name": "Мыло хозяйственное",
-        "description": "увлажняет и придает блеск",
+        "name": "Шампунь",
+        "description": "увлажняет",
         "amount": 0,
         "price": Decimal("10"),
     },
     {
         "name": "Отдушка",
-        "description": "увлажняет и придает блеск",
+        "description": "увлажняет и не придает блеск",
         "amount": 5,
         "price": Decimal("10"),
     },
@@ -150,17 +151,18 @@ PROMOTION = [
         "name": "23 февраля",
         "description": "Всем служившим - скидка 15%",
         "discount_percent": 15,
-        "start_date": "2026-02-22",
-        "end_date": "2026-02-24",
+        "start_date": "2026-10-15",
+        "end_date": "2026-11-01",
         "is_active": True,
     },
     {
-        "name": "12 июня",
+        "name": "4 ноября",
         "description": "скидка 10%",
         "discount_percent": 10,
-        "start_date": "2026-06-11",
-        "end_date": "2026-06-13",
+        "start_date": "2026-10-15",
+        "end_date": "2026-11-11",
         "is_active": True,
+        "services": ["Супермодель", "Мистер мускул"],
     },
     {
         "name": "01 января",
@@ -168,7 +170,8 @@ PROMOTION = [
         "discount_percent": 50,
         "start_date": "2026-12-31",
         "end_date": "2027-01-02",
-        "is_active": True,
+        "is_active": False,
+        "services": ["Мистер мускул", "Бородач"],
     },
 ]
 
@@ -179,42 +182,49 @@ class Command(BaseCommand):
     help = "Создаёт записи для ДЗ №4 (идемпотентно)."
 
     def handle(self, *args, **options):
-        created_count = 0
-        for data in BARBERSHOP:
-            _, created = Barbershop.objects.get_or_create(
-                name=data["name"],
-                defaults=data,
-            )
-            if created:
-                created_count += 1
+        with transaction.atomic():
+            created_count = 0
+            for data in BARBERSHOP:
+                _, created = Barbershop.objects.update_or_create(
+                    name=data["name"],
+                    defaults=data,
+                )
+                if created:
+                    created_count += 1
 
-        for data in BOOKINGSERVICE:
-            _, created = BookingService.objects.get_or_create(
-                name=data["name"],
-                defaults=data,
-            )
-            if created:
-                created_count += 1
+            for data in BOOKINGSERVICE:
+                _, created = BookingService.objects.update_or_create(
+                    name=data["name"],
+                    defaults=data,
+                )
+                if created:
+                    created_count += 1
 
-        for data in PRODUCT:
-            _, created = Product.objects.get_or_create(
-                name=data["name"],
-                defaults=data,
-            )
-            if created:
-                created_count += 1
+            for data in PRODUCT:
+                _, created = Product.objects.update_or_create(
+                    name=data["name"],
+                    defaults=data,
+                )
+                if created:
+                    created_count += 1
 
-        for data in PROMOTION:
-            _, created = Promotion.objects.get_or_create(
-                name=data["name"],
-                defaults=data,
-            )
-            if created:
-                created_count += 1
+            for data in PROMOTION:
+                services_names = data.get("services", [])
+                promotion_fields = {k: v for k, v in data.items() if k not in ("name", "services")}
+                promotion, created = Promotion.objects.update_or_create(
+                    name=data["name"],
+                    defaults=promotion_fields,
+                )
+                if created:
+                    created_count += 1
+                # Устанавливаем связи ManyToMany после создания/обновления
+
+                service_objs = BookingService.objects.filter(name__in=services_names)
+                promotion.services.set(service_objs)
 
         if created_count > 0:
             self.stdout.write(
-            self.style.SUCCESS(f"Готово: создано {created_count} записей."),
+                self.style.SUCCESS(f"Готово: создано {created_count} записей."),
             )
         else:
             self.stdout.write("Записи уже существуют.")
