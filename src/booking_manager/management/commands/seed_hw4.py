@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from django.utils import timezone
 
 from decimal import Decimal
 
@@ -7,7 +10,7 @@ from account.models.user import User
 from account.constants import ClientStatusChoices
 from account.models.client import Client
 from account.models.barber import Barber
-from ...models import Barbershop, BookingService, Product, Promotion
+from ...models import Barbershop, BookingService, Product, Promotion, Booking, Comment, ProductBooking
 
 
 BARBERSHOP = [
@@ -403,6 +406,187 @@ BARBERS = [
     },
 ]
 
+BOOKINGS = [
+    {
+        "name": "Бронь client2-1",
+        "client_email": "client2@example.com",
+        "barber_email": "barber1@example.com",
+        "service_name": "Супермодель",
+        "barbershop": "ДРОВОСЕК",
+        "visit_time": datetime(2026, 11, 1, 10, 0, tzinfo=timezone.UTC),
+        "is_active": True,
+    },
+    {
+        "name": "Бронь client2-2",
+        "client_email": "client2@example.com",
+        "barber_email": "barber2@example.com",
+        "service_name": "Бородач",
+        "barbershop": "ДРОВОСЕК",
+        "visit_time": datetime(2026, 11, 5, 14, 0, tzinfo=timezone.UTC),
+        "is_active": True,
+    },
+    {
+        "name": "Бронь client3-1",
+        "client_email": "client3@example.com",
+        "barber_email": "barber3@example.com",
+        "service_name": "Супермодель",
+        "barbershop": "ДРОВОСЕК",
+        "visit_time": datetime(2026, 11, 10, 11, 0, tzinfo=timezone.UTC),
+        "is_active": True,
+    },
+    {
+        "name": "Бронь client3-2",
+        "client_email": "client3@example.com",
+        "barber_email": "barber4@example.com",
+        "service_name": "Мистер мускул",
+        "barbershop": "ДРОВОСЕК",
+        "visit_time": None,
+        "is_active": True,
+    },
+    {
+        "name": "Бронь client1",
+        "client_email": "client1@example.com",
+        "barber_email": "barber5@example.com",
+        "service_name": "Корона",
+        "barbershop": "ДРОВОСЕК",
+        "visit_time": datetime(2026, 11, 15, 9, 0, tzinfo=timezone.UTC),
+        "is_active": True,
+    },
+    {
+        "name": "Бронь client4",
+        "client_email": "client4@example.com",
+        "barber_email": "barber1@example.com",
+        "service_name": "Серебро",
+        "barbershop": "ДРОВОСЕК",
+        "visit_time": datetime(2026, 11, 20, 16, 0, tzinfo=timezone.UTC),
+        "is_active": True,
+    },
+    {
+        "name": "Бронь client5",
+        "client_email": "client5@example.com",
+        "barber_email": "barber6@example.com",
+        "service_name": "Слалом",
+        "barbershop": "ДРОВОСЕК",
+        "visit_time": datetime(2026, 11, 25, 12, 0, tzinfo=timezone.UTC),
+        "is_active": True,
+    },
+    {
+        "name": "Бронь client6",
+        "client_email": "client6@example.com",
+        "barber_email": "barber7@example.com",
+        "service_name": "Юниверсал",
+        "barbershop": "ДРОВОСЕК",
+        "visit_time": None,
+        "is_active": True,
+    },
+]
+
+COMMENTS = [
+    {
+        "booking_name": "Бронь client2-1",
+        "client_email": "client2@example.com",
+        "barber_email": "barber1@example.com",
+        "text": "Отличный мастер, рекомендую!",
+        "rating": 5,
+        "is_published": True,
+    },
+    {
+        "booking_name": "Бронь client2-2",
+        "client_email": "client2@example.com",
+        "barber_email": "barber2@example.com",
+        "text": "Хорошая стрижка",
+        "rating": 4,
+        "is_published": True,
+    },
+    {
+        "booking_name": "Бронь client3-1",
+        "client_email": "client3@example.com",
+        "barber_email": "barber3@example.com",
+        "text": "Нормально",
+        "rating": 3,
+        "is_published": True,
+    },
+    {
+        "booking_name": "Бронь client3-2",
+        "client_email": "client3@example.com",
+        "barber_email": "barber4@example.com",
+        "text": "Не очень понравилось",
+        "rating": 2,
+        "is_published": True,
+    },
+    {
+        "booking_name": "Бронь client1",
+        "client_email": "client1@example.com",
+        "barber_email": "barber5@example.com",
+        "text": "Превосходно!",
+        "rating": 5,
+        "is_published": True,
+    },
+    {
+        "booking_name": "Бронь client4",
+        "client_email": "client4@example.com",
+        "barber_email": "barber1@example.com",
+        "text": "Быстро и качественно",
+        "rating": 4,
+        "is_published": False,
+    },
+    {
+        "booking_name": "Бронь client5",
+        "client_email": "client5@example.com",
+        "barber_email": "barber6@example.com",
+        "text": "Средне",
+        "rating": 3,
+        "is_published": True,
+    },
+    {
+        "booking_name": "Бронь client6",
+        "client_email": "client6@example.com",
+        "barber_email": "barber7@example.com",
+        "text": "Отлично!",
+        "rating": 5,
+        "is_published": True,
+    },
+]
+
+PRODUCT_BOOKINGS = [
+    {
+        "booking_name": "Бронь client2-1",
+        "product_name": "Шампунь",
+        "quantity": 2,
+        "total_price": Decimal("20.00"),
+    },
+    {
+        "booking_name": "Бронь client2-2",
+        "product_name": "Шампунь",
+        "quantity": 1,
+        "total_price": Decimal("10.00"),
+    },
+    {
+        "booking_name": "Бронь client4",
+        "product_name": "Шампунь",
+        "quantity": 3,
+        "total_price": Decimal("30.00"),
+    },
+    {
+        "booking_name": "Бронь client4",
+        "product_name": "Лак для волос",
+        "quantity": 1,
+        "total_price": Decimal("10.00"),
+    },
+    {
+        "booking_name": "Бронь client1",
+        "product_name": "Крем после бритья",
+        "quantity": 2,
+        "total_price": Decimal("20.00"),
+    },
+    {
+        "booking_name": "Бронь client3-1",
+        "product_name": "Скраб ромашка",
+        "quantity": 1,
+        "total_price": Decimal("10.00"),
+    },
+]
+
 
 
 
@@ -488,6 +672,75 @@ class Command(BaseCommand):
                         barber, created = Barber.objects.get_or_create(
                             user=user,
                             defaults=barber_fields,
+                        )
+                        if created:
+                            created_count += 1
+
+            for data in BOOKINGS:
+                client_user = User.objects.filter(email=data["client_email"]).first()
+                barber_user = User.objects.filter(email=data["barber_email"]).first()
+                if client_user and barber_user:
+                    client = Client.objects.filter(user=client_user).first()
+                    barber = Barber.objects.filter(user=barber_user).first()
+                    if client and barber:
+                        service = BookingService.objects.filter(name=data["service_name"]).first()
+                        bs = Barbershop.objects.filter(name=data["barbershop"]).first()
+                        if service and bs:
+                            booking_fields = {
+                                "name": data["name"],
+                                "client": client,
+                                "barber": barber,
+                                "booking_service": service,
+                                "barbershop": bs,
+                                "visit_time": data.get("visit_time"),
+                                "is_active": data.get("is_active", True),
+                            }
+                            _, created = Booking.objects.update_or_create(
+                                name=data["name"],
+                                defaults=booking_fields,
+                            )
+                            if created:
+                                created_count += 1
+
+            for data in COMMENTS:
+                booking = Booking.objects.filter(name=data["booking_name"]).first()
+                if booking:
+                    client_user = User.objects.filter(email=data["client_email"]).first()
+                    barber_user = User.objects.filter(email=data["barber_email"]).first()
+                    if client_user and barber_user:
+                        client = Client.objects.filter(user=client_user).first()
+                        barber = Barber.objects.filter(user=barber_user).first()
+                        if client and barber:
+                            comment_fields = {
+                                "booking": booking,
+                                "client": client,
+                                "barber": barber,
+                                "text": data["text"],
+                                "rating": data["rating"],
+                                "is_published": data["is_published"],
+                            }
+                            _, created = Comment.objects.update_or_create(
+                                booking=booking,
+                                defaults=comment_fields,
+                            )
+                            if created:
+                                created_count += 1
+
+            for data in PRODUCT_BOOKINGS:
+                booking = Booking.objects.filter(name=data["booking_name"]).first()
+                if booking:
+                    product = Product.objects.filter(name=data["product_name"]).first()
+                    if product:
+                        pb_fields = {
+                            "booking": booking,
+                            "product": product,
+                            "quantity": data["quantity"],
+                            "total_price": data["total_price"],
+                        }
+                        _, created = ProductBooking.objects.update_or_create(
+                            booking=booking,
+                            product=product,
+                            defaults=pb_fields,
                         )
                         if created:
                             created_count += 1
