@@ -1,8 +1,7 @@
 from django.db import models
-from django.db.models.deletion import SET_DEFAULT
 
 from core.models import BaseModel
-from booking_manager.constants import CategoryChoices
+
 
 class Booking(BaseModel):
     """Класс (таблица) бронирования услуг."""

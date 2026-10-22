@@ -45,11 +45,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # добавлен debug_toolbar (hw5)
     "debug_toolbar",
     # PostgreSQL-специфичные фичи: полнотекстовый поиск, ArrayField.
     "django.contrib.postgres",
     # custom_app
     "booking_manager",
+    # добавлено сторонее расширение django extensions
     "django_extensions",
     "account",
 ]
@@ -60,6 +62,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # добвален добавлен debug_toolbar (hw5)
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",

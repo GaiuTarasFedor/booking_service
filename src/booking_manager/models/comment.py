@@ -1,19 +1,13 @@
 from django.db import models
 
-from core.models import BaseModel
+from core.models import BaseModel, RatingMixin
 
 
-class Comment(BaseModel):
+class Comment(BaseModel, RatingMixin):
     """Класс для хранения комментариев."""
 
     text = models.TextField(
         verbose_name="комментарий",
-        null=True,
-        blank=True,
-    )
-
-    rating = models.PositiveSmallIntegerField(
-        verbose_name="рейтинг",
         null=True,
         blank=True,
     )

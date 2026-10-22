@@ -15,3 +15,14 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+class RatingMixin(models.Model):
+
+    rating = models.PositiveSmallIntegerField(
+        verbose_name="рейтинг",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        abstract = True

@@ -4,6 +4,7 @@ from django.db import models
 from account.management.commands.managers import UserManager
 from core.models import BaseModel
 
+
 class User(AbstractUser, BaseModel):
     """Клас (таблица) пользователей."""
 

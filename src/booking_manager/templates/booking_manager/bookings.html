@@ -8,16 +8,16 @@
     {% for booking in bookings %}
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ booking.client }}</h5>
-                <p class="card-text">Service: {{ booking.service }}</p>
-                <p class="card-text">Date: {{ booking.date }}</p>
-                <p class="card-text">Time: {{ booking.time }}</p>
-                    {% if booking.status == "confirmed" %}
-                        <span class="badge text-bg-success">Confirmed</span>
-                    {% elif booking.status == "pending" %}
-                        <span class="badge text-bg-warning text-dark">Pending</span>
-                    {% elif booking.status == "cancelled" %}
-                        <span class="badge text-bg-danger text-dark">Cancelled</span>
+                <h5 class="card-title">{{ booking.client.user.first_name }}</h5>
+                <h5 class="card-title">{{ booking.client.user.last_name }}</h5>
+                <h4 class="card-title"> {{ booking.name }} </h4>
+                <p class="card-text">Barber: {{ booking.barber.user.first_name }}</p>
+                <p class="card-text">Service: {{ booking.booking_service.name }}</p>
+                <p class="card-text">Date & Time: {{ booking.visit_time|date:"d.m.Y H:i"|default:"—" }}</p>
+                    {% if booking.is_active %}
+                        <span class="badge text-bg-success">Active</span>
+                    {% else %}
+                        <span class="badge text-bg-warning text-dark">Inactive</span>
                     {% endif %}
                 <a href="#" class="btn btn-primary btn-sm">View</a>
                 <a href="#" class="btn btn-danger btn-sm">Cancel</a>
