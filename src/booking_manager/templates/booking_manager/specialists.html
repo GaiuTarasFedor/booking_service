@@ -8,8 +8,7 @@
     {% for barber in barbers %}
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ barber.user.first_name }}</h5>
-                <h5 class="card-title">{{ barber.user.last_name }}</h5>
+                <h5 class="card-title">{{ barber.user.first_name }} {{ barber.user.last_name }}</h5>
                 <p class="card-text">Experience: {{ barber.experience_year|default_if_none:"—" }} years</p>
                 {% for comment in barber.comments.all  %}
                     <p class="card-text">Комментарий: {{ comment.text }}</p>

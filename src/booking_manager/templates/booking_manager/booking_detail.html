@@ -1,0 +1,21 @@
+{% extends "booking_manager/base.html" %}
+
+{% block title %}Booking detail{% endblock %}
+
+{% block content %}
+    <h2>Детали бронирования.</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ booking.client.user.first_name }} {{ booking.client.user.last_name }}</h5>
+            <h4 class="card-title"> {{ booking.name }} </h4>
+            <p class="card-text">Barber: {{ booking.barber.user.first_name }}</p>
+            <p class="card-text">Услуга: {{ booking.booking_service.name }}</p>
+            <p class="card-text">Дата & время: {{ booking.visit_time|date:"d.m.Y H:i"|default:"—" }}</p>
+                {% if booking.is_active %}
+                    <span class="badge text-bg-success">Active</span>
+                {% else %}
+                    <span class="badge text-bg-warning text-dark">Inactive</span>
+                {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -4,7 +4,7 @@
 Каждое представление принимает HttpRequest и возвращает HttpResponse.
 """
 from django.db.models.query import Prefetch
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from account.models import Barber
 from .data import SERVICES
@@ -44,3 +44,17 @@ def booking_new(request):
         request,
         "booking_manager/booking_new.html",
     )
+
+def booking_detail(request, pk):
+    """Страница с деталями бронирования."""
+    booking = get_object_or_404(
+        Booking.objects.select_related("client__user", 
+                                        "barber__user", 
+                                        "booking_service"), 
+        pk=pk
+        )
+    return render(
+        request, 
+        "booking_manager/booking_detail.html", 
+        {"booking": booking}
+        )
