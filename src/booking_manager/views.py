@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 
 from account.models import Barber
 from .data import SERVICES
-from booking_manager.models import Booking, Comment
+from booking_manager.models import Booking, Comment, ProductBooking
 
 
 def home(request):
@@ -47,10 +47,14 @@ def booking_new(request):
 
 def booking_detail(request, pk):
     """Страница с деталями бронирования."""
-    booking = get_object_or_404(
-        Booking.objects.select_related("client__user", 
-                                        "barber__user", 
-                                        "booking_service"), 
+    booking = get_object_or_404(Booking.objects.select_related(
+            "client__user", 
+            "barber__user", 
+            "booking_service"
+            ).prefetch_related(Prefetch(
+                    "product_bookings",
+                    queryset=ProductBooking.objects.select_related("product")
+                )),
         pk=pk
         )
     return render(

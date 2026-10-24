@@ -16,6 +16,12 @@
                 {% else %}
                     <span class="badge text-bg-warning text-dark">Inactive</span>
                 {% endif %}
+                {% for item in booking.product_bookings.all %}
+                    <h5 class="card-title">{{ item.product.name }} - {{ item.quantity }}</h5>
+                {% empty %}
+                    <h5 class="card-title">Товары в бронирование не добавлены.</h5>  
+                {% endfor %}      
+                
         </div>
     </div>
 {% endblock %}
