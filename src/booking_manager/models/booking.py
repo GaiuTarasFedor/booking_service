@@ -2,6 +2,8 @@ from django.db import models
 
 from core.models import BaseModel
 
+from booking_manager.managers import BookingManager
+
 
 class Booking(BaseModel):
     """Класс (таблица) бронирования услуг."""
@@ -55,6 +57,8 @@ class Booking(BaseModel):
         on_delete=models.CASCADE,
         related_name="bookings",
     )
+
+    objects = BookingManager()
 
     def __str__(self):
         return self.name
