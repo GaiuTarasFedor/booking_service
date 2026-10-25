@@ -4,11 +4,12 @@
 Каждое представление принимает HttpRequest и возвращает HttpResponse.
 """
 from django.db.models.query import Prefetch
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 from account.models import Barber
-from .data import SERVICES
 from booking_manager.models import Booking, Comment, ProductBooking
+
+from .data import SERVICES
 
 
 def home(request):

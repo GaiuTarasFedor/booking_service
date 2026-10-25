@@ -1,5 +1,3 @@
-from django.test import TestCase
-from decimal import Decimal
 
 # from .models import Booking
 # from .management.commands.seed_bookings import BOOKINGS

@@ -1,7 +1,7 @@
 from django.db import models
 
-from core.models import BaseModel
 from account.constants import ClientStatusChoices
+from core.models import BaseModel
 
 
 class Client(BaseModel):

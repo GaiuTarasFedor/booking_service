@@ -1,8 +1,7 @@
 from django.db import models
 
-from core.models import BaseModel
-
 from booking_manager.managers import BookingManager
+from core.models import BaseModel
 
 
 class Booking(BaseModel):

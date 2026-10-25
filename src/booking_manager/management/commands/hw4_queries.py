@@ -1,7 +1,13 @@
 from django.core.management.base import BaseCommand
 
-from account.models import User, Client, Barber, barber
-from booking_manager.models import Barbershop, BookingService, Product, Promotion, Booking, Comment, ProductBooking
+from account.models import Barber
+from booking_manager.models import (
+    Barbershop,
+    Booking,
+    BookingService,
+    Comment,
+    Product,
+)
 
 
 class Command(BaseCommand):
