@@ -1,14 +1,21 @@
-from faker import Faker
-from datetime import datetime, time, timedelta, UTC
+from datetime import UTC, datetime, time, timedelta
 from random import choice
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from faker import Faker
 
-from booking_manager.models import Barbershop, BookingService, Product, Promotion, Booking, Comment, ProductBooking
-from account.models import User, Client, Barber
 from account.constants import ClientStatusChoices
-
+from account.models import Barber, Client, User
+from booking_manager.models import (
+    Barbershop,
+    Booking,
+    BookingService,
+    Comment,
+    Product,
+    ProductBooking,
+    Promotion,
+)
 
 BARBERSHOPS = [
     {
@@ -59,7 +66,6 @@ BARBERSHOPS = [
 ]
 
 from decimal import Decimal
-
 
 BOOKINGSERVICE = [
     {
@@ -454,7 +460,7 @@ class Command(BaseCommand):
                     booking = booking,
                     defaults={
                         "product": product,
-                        "total_price": (product.price or Decimal("0")) * quantity,
+                        "total_price": (product.price or Decimal(0)) * quantity,
                         "quantity": quantity,
                     }
                 )
@@ -466,3 +472,5 @@ class Command(BaseCommand):
         else:
              self.stdout.write(f"Создано {count_created} связей 'бронирование - продукт'.")
         self.stdout.write(f"В базе данных находится {ProductBooking.objects.count()} связей 'бронирование - продукт'.")
+
+        
