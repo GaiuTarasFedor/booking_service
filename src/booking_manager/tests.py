@@ -1,4 +1,3 @@
-
 # from .models import Booking
 # from .management.commands.seed_bookings import BOOKINGS
 

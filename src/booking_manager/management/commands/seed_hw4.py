@@ -157,7 +157,6 @@ PRODUCT = [
         "amount": 17,
         "price": Decimal("10"),
     },
-
 ]
 
 PROMOTION = [
@@ -593,8 +592,6 @@ PRODUCT_BOOKINGS = [
         "total_price": Decimal("10.00"),
     },
 ]
-
-
 
 
 class Command(BaseCommand):

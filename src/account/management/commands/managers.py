@@ -33,5 +33,3 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)  # только если ключа нет
         extra_fields.setdefault("is_superuser", True)  # только если ключа нет
         return self._create_user(email, password, **extra_fields)
-
-

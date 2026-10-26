@@ -63,6 +63,8 @@ class Command(BaseCommand):
         self.stdout.write(f"{qs.count()}")
 
         # брони с `product_bookings__product__name="Шампунь"` __и__ `barber__experience_year__gt=3`
-        qs = Booking.objects.filter(product_bookings__product__name="Шампунь", barber__experience_year__gt=3).distinct()
+        qs = Booking.objects.filter(
+            product_bookings__product__name="Шампунь", barber__experience_year__gt=3
+        ).distinct()
         self.stdout.write(f"{qs.query}")
         self.stdout.write(f"{qs.count()}")

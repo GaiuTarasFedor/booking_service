@@ -1,4 +1,5 @@
 from datetime import UTC, datetime, time, timedelta
+from decimal import Decimal
 from random import choice
 
 from django.core.management.base import BaseCommand
@@ -64,8 +65,6 @@ BARBERSHOPS = [
         "is_active": True,
     },
 ]
-
-from decimal import Decimal
 
 BOOKINGSERVICE = [
     {
@@ -230,6 +229,7 @@ BOOKINGSERVICE = [
     },
 ]
 
+
 class Command(BaseCommand):
     """Команда для генерации тестовых данных в БД."""
 
@@ -241,13 +241,10 @@ class Command(BaseCommand):
         with transaction.atomic():
             count_created = 0
             for data in BARBERSHOPS:
-                _, created = Barbershop.objects.get_or_create(
-                        name=data["name"],
-                        defaults=data
-                    )
+                _, created = Barbershop.objects.get_or_create(name=data["name"], defaults=data)
                 if created:
                     count_created += 1
-        
+
         if count_created == 0:
             self.stdout.write("Барбершопы уже существуют в базе данных, новые не создавались.")
         else:
@@ -257,13 +254,10 @@ class Command(BaseCommand):
         with transaction.atomic():
             count_created = 0
             for data in BOOKINGSERVICE:
-                _, created = BookingService.objects.get_or_create(
-                        name=data["name"],
-                        defaults=data
-                    )
+                _, created = BookingService.objects.get_or_create(name=data["name"], defaults=data)
                 if created:
                     count_created += 1
-        
+
         if count_created == 0:
             self.stdout.write("Услуги уже существуют в базе данных, новые не создавались.")
         else:
@@ -274,17 +268,14 @@ class Command(BaseCommand):
             count_created = 0
             for i in range(1, 51):
                 _, created = Product.objects.update_or_create(
-                    name = f"Товар gen {i:02d}", 
-                    defaults = {
+                    name=f"Товар gen {i:02d}",
+                    defaults={
                         "price": fake.pydecimal(
-                            left_digits=2, 
-                            right_digits=2, 
-                            min_value=2,
-                            positive=True
-                            ),
+                            left_digits=2, right_digits=2, min_value=2, positive=True
+                        ),
                         "amount": fake.pyint(min_value=1, max_value=20),
-                        "description": fake.text(max_nb_chars=30)
-                    }
+                        "description": fake.text(max_nb_chars=30),
+                    },
                 )
                 if created:
                     count_created += 1
@@ -302,18 +293,18 @@ class Command(BaseCommand):
                 random_services = fake.random_elements(elements=list_servace, length=3)
                 description = fake.text(max_nb_chars=30)
                 discount_percent = fake.pyint(min_value=0, max_value=20)
-                start_date = fake.date_between(start_date='-1w')
+                start_date = fake.date_between(start_date="-1w")
                 end_date = start_date + timedelta(days=fake.pyint(min_value=2, max_value=7))
                 is_active = True
                 promo, created = Promotion.objects.get_or_create(
                     name=f"Акция № {i:02d}",
                     defaults={
-                    "description":description,
-                    "discount_percent":discount_percent,
-                    "start_date":start_date,
-                    "end_date":end_date,
-                    "is_active":is_active,
-                    }
+                        "description": description,
+                        "discount_percent": discount_percent,
+                        "start_date": start_date,
+                        "end_date": end_date,
+                        "is_active": is_active,
+                    },
                 )
                 promo.services.set(random_services)
                 if created:
@@ -324,33 +315,34 @@ class Command(BaseCommand):
         else:
             self.stdout.write(f"Создано {count_created} акций.")
         self.stdout.write(f"В базе данных находится {Promotion.objects.count()} акций.")
-            
+
         with transaction.atomic():
-            password ="password123"
+            password = "password123"
             count_created = 0
             for i in range(1, 101):
-                if User.objects.filter(email=f"gen_user{i:03d}@example.com").exists():
-                    continue
-                else:
-                    other_fields={
-                        "username": f"gen_user{i:03d}.@example.com",
-                        "first_name": fake.first_name(),
-                        "last_name": fake.last_name(),
-                        "phone": fake.phone_number(),
-                        "is_staff": False,
-                    }
-                    User.objects.create_user(
-                        email=f"gen_user{i:03d}@example.com",
-                        password=password,
-                        **other_fields)
+                email = f"gen_user{i:03d}@example.com"
+                other_fields = {
+                    "username": f"gen_user{i:03d}.@example.com",
+                    "first_name": fake.first_name(),
+                    "last_name": fake.last_name(),
+                    "phone": fake.phone_number(),
+                    "is_staff": False,
+                }
+                user, created = User.objects.get_or_create(
+                    email=email,
+                    defaults=other_fields,
+                )
+                if password and created:
+                    user.set_password(password)
+                    user.save(update_fields=["password"])
+                if created:
                     count_created += 1
-
         if count_created == 0:
             self.stdout.write("Пользователи уже существуют в базе данных, новые не создавались.")
         else:
             self.stdout.write(f"Создано {count_created} пользователей.")
         self.stdout.write(f"В базе данных находится {User.objects.count()} пользователей.")
-            
+
         with transaction.atomic():
             users = User.objects.filter(email__startswith="gen_user").order_by("id")[:95]
             qs_barber = users[:15]
@@ -360,40 +352,46 @@ class Command(BaseCommand):
             count_created = 0
             for user in qs_barber:
                 _, created = Barber.objects.get_or_create(
-                        user=user,
-                        defaults={
-                            "experience_year": fake.pyint(min_value=0, max_value=20),
-                            "barbershop": fake.random_element(elements=list_barbershops)
-                        }
-                    )   
+                    user=user,
+                    defaults={
+                        "experience_year": fake.pyint(min_value=0, max_value=20),
+                        "barbershop": fake.random_element(elements=list_barbershops),
+                    },
+                )
                 if created:
                     count_created += 1
             for user in qs_client:
                 _, created = Client.objects.get_or_create(
-                        user=user,
-                        defaults={
-                            "status": fake.random_element(elements=list_status),
-                            "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=70)
-                        }
-                    )   
+                    user=user,
+                    defaults={
+                        "status": fake.random_element(elements=list_status),
+                        "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=70),
+                    },
+                )
                 if created:
                     count_created += 1
             if count_created == 0:
-                self.stdout.write("Клиенты и барберы уже существуют в базе данных, новые не создавались.")
+                self.stdout.write(
+                    "Клиенты и барберы уже существуют в базе данных, новые не создавались."
+                )
             else:
                 self.stdout.write(f"Создано {count_created} клиентов и барберов.")
             self.stdout.write(
-                f"В базе данных находится {Client.objects.count()} клиентов и {Barber.objects.count()} барберов."
+                f"В базе данных находится {Client.objects.count()} клиентов "
+                f"и {Barber.objects.count()} барберов."
             )
 
         with transaction.atomic():
-            list_clients = list(Client.objects.filter(
-                user__email__startswith="gen_user").select_related("user").order_by("id")
-                )
-            list_barbers = list(Barber.objects.filter(
-                user__email__startswith="gen_user"
-                ).select_related("barbershop", "user").order_by('id')
-                )
+            list_clients = list(
+                Client.objects.filter(user__email__startswith="gen_user")
+                .select_related("user")
+                .order_by("id")
+            )
+            list_barbers = list(
+                Barber.objects.filter(user__email__startswith="gen_user")
+                .select_related("barbershop", "user")
+                .order_by("id")
+            )
             list_services = list(BookingService.objects.all())
             count_created = 0
             for i in range(1, 501):
@@ -403,13 +401,15 @@ class Command(BaseCommand):
                 _, created = Booking.objects.get_or_create(
                     name=f"Бронь gen {i:04d}",
                     defaults={
-                        "visit_time": fake.date_time_between(start_date='-30d', end_date='+30d', tzinfo=UTC),
+                        "visit_time": fake.date_time_between(
+                            start_date="-30d", end_date="+30d", tzinfo=UTC
+                        ),
                         "is_active": fake.boolean(chance_of_getting_true=80),
                         "booking_service": service,
                         "barber": barber,
                         "client": client,
                         "barbershop": barber.barbershop,
-                    }
+                    },
                 )
                 if created:
                     count_created += 1
@@ -422,55 +422,58 @@ class Command(BaseCommand):
 
         with transaction.atomic():
             list_bookings = list(
-                Booking.objects.select_related("barber", "client").filter(
-                    name__startswith="Бронь gen", visit_time__lte=datetime.now(UTC)
-                    ).order_by("id")[:200]
-                )
+                Booking.objects.select_related("barber", "client")
+                .filter(name__startswith="Бронь gen", visit_time__lte=datetime.now(UTC))
+                .order_by("id")[:200]
+            )
             count_created = 0
             for booking in list_bookings:
                 _, created = Comment.objects.get_or_create(
-                    booking = booking,
+                    booking=booking,
                     defaults={
                         "text": fake.text(max_nb_chars=100),
                         "is_published": fake.boolean(chance_of_getting_true=80),
                         "barber": booking.barber,
                         "client": booking.client,
                         "rating": fake.pyint(min_value=0, max_value=5),
-                    }
+                    },
                 )
                 if created:
                     count_created += 1
- 
+
         if count_created == 0:
-             self.stdout.write("Комментарии уже существуют в базе данных, новые не создавались.")
+            self.stdout.write("Комментарии уже существуют в базе данных, новые не создавались.")
         else:
-             self.stdout.write(f"Создано {count_created} комментариев.")
+            self.stdout.write(f"Создано {count_created} комментариев.")
         self.stdout.write(f"В базе данных находится {Comment.objects.count()} комментариев.")
 
         with transaction.atomic():
             list_bookings = list(
                 Booking.objects.filter(name__startswith="Бронь gen").order_by("id")[100:300]
-                )
+            )
             list_product = list(Product.objects.all())
             count_created = 0
             for booking in list_bookings:
                 product = choice(list_product)
                 quantity = fake.pyint(min_value=1, max_value=5)
                 _, created = ProductBooking.objects.get_or_create(
-                    booking = booking,
+                    booking=booking,
                     defaults={
                         "product": product,
                         "total_price": (product.price or Decimal(0)) * quantity,
                         "quantity": quantity,
-                    }
+                    },
                 )
                 if created:
                     count_created += 1
- 
-        if count_created == 0:
-             self.stdout.write("Связи 'бронирование - продукт' уже существуют в базе данных, новые не создавались.")
-        else:
-             self.stdout.write(f"Создано {count_created} связей 'бронирование - продукт'.")
-        self.stdout.write(f"В базе данных находится {ProductBooking.objects.count()} связей 'бронирование - продукт'.")
 
-        
+        if count_created == 0:
+            self.stdout.write(
+                "Связи 'бронирование - продукт' уже существуют в базе данных, новые не создавались."
+            )
+        else:
+            self.stdout.write(f"Создано {count_created} связей 'бронирование - продукт'.")
+        self.stdout.write(
+            f"В базе данных находится {ProductBooking.objects.count()} "
+            f"связей 'бронирование - продукт'."
+        )

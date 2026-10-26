@@ -21,8 +21,8 @@ class Product(BaseModel):
     description = models.TextField(
         max_length=255,
         verbose_name="описание",
-        null=True,
         blank=True,
+        default="",
     )
 
     amount = models.PositiveIntegerField(
