@@ -121,3 +121,6 @@ NEXT_STEPS.md
 HW*.md
 .sessions/
 .vscode/
+
+# локальные заметки об изменениях (не коммитим)
+CHANGES_*.md

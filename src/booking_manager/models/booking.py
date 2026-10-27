@@ -65,4 +65,5 @@ class Booking(BaseModel):
     class Meta:
         db_table = "bookings"
         verbose_name = "Бронирование мастера"
+        verbose_name_plural = "Бронирования мастеров"
         ordering = ["-created_at", "name"]
