@@ -44,6 +44,7 @@ class Product(BaseModel):
     class Meta:
         db_table = "product"
         verbose_name = "товар"
+        verbose_name_plural = "товары"
         # В дополнение к валидации Python добил валидацию в БД
         constraints = [
             models.CheckConstraint(

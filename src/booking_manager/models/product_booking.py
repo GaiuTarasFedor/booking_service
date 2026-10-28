@@ -43,6 +43,7 @@ class ProductBooking(BaseModel):
     class Meta:
         db_table = "product_bookings"
         verbose_name = "товары в бронировании"
+        verbose_name_plural = "товары в бронировании"
         constraints = [
             models.CheckConstraint(
                 condition=models.Q(total_price__gte=0),

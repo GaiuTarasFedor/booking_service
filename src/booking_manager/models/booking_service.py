@@ -55,6 +55,7 @@ class BookingService(BaseModel):
     class Meta:
         db_table = "booking_service"
         verbose_name = "услуга"
+        verbose_name_plural = "услуги"
         # В дополнение к валидации Python добавил валидацию в БД
         constraints = [
             models.CheckConstraint(
