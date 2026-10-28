@@ -63,8 +63,7 @@ class Command(BaseCommand):
         with transaction.atomic():
             count_created = 0
             for data in BARBERSHOPS:
-                # при необходимости можно заменить метод создания на update_or_created чтобы 
-                # обновлять значения
+                # при необходимости можно заменить метод создания на update_or_create, чтобы обновлять значения
                 _, created = Barbershop.objects.get_or_create(name=data["name"], defaults=data)
                 if created:
                     count_created += 1
