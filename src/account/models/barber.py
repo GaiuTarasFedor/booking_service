@@ -1,19 +1,13 @@
 from django.db import models
 
-from core.models import BaseModel
+from core.models import BaseModel, RatingMixin
 
 
-class Barber(BaseModel):
+class Barber(BaseModel, RatingMixin):
     """Класс (таблица) барберов."""
 
     experience_year = models.PositiveIntegerField(
         verbose_name="опыт работы",
-        null=True,
-        blank=True,
-    )
-
-    rating = models.PositiveIntegerField(
-        verbose_name="рейтинг",
         null=True,
         blank=True,
     )

@@ -5,12 +5,18 @@
 {% block content %}
     <h2>Список специалистов.</h2>
 
-    {% for specialist in specialists %}
+    {% for barber in barbers %}
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ specialist.name }}</h5>
-                <p class="card-text">Speciality: {{ specialist.speciality }}</p>
-                <p class="card-text">Experience: {{ specialist.experience }} years</p>
+                <h5 class="card-title">{{ barber.user.first_name }} {{ barber.user.last_name }}</h5>
+                <p class="card-text">Experience: {{ barber.experience_year|default_if_none:"—" }} years</p>
+                {% for comment in barber.comments.all  %}
+                    <p class="card-text">Комментарий: {{ comment.text }}</p>
+                    <p class="card-text">Оценка: {{ comment.rating }}</p>
+                    <p class="card-text">Автор отзыва/оценки: {{ comment.client.user.first_name }} {{ comment.client.user.last_name }}</p>
+                {% empty %}
+                    <p class="card-text">Комментария пока нет.</p>
+                {% endfor %}
             </div>
         </div>
     {% endfor %}

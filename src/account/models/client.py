@@ -25,6 +25,9 @@ class Client(BaseModel):
         unique=True,
     )
 
+    def __str__(self):
+        return f"{self.user.username} - {self.user.first_name} {self.user.last_name}"
+
     class Meta:
         verbose_name = "клиент"
         verbose_name_plural = "клиенты"
