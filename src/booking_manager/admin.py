@@ -13,7 +13,24 @@ from booking_manager.models import (
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    pass
+    """Описывает бронирование в админке."""
+
+    list_display = [
+        "name",
+        "visit_time",
+        "is_active",
+        "barber",
+        "client",
+        "booking_service",
+        "castom_booking",
+    ]
+    list_select_related = ("barber__user", "client", "booking_service")
+    list_display_links = ["name", "visit_time"]
+    list_editable = ["is_active"]
+
+    @admin.display(description="Барбер на бронировании", ordering="barber__user__first_name")
+    def castom_booking(self, obj):
+        return f"{obj.name}: {obj.barber.user.get_full_name() or obj.barber.user.email}"
 
 
 @admin.register(BookingService)
@@ -28,7 +45,8 @@ class BarbershopAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["name", "price", "amount", "description"]
+    list_editable = ["price", "amount"]
 
 
 @admin.register(Comment)
