@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
 
 from core.models import BaseModel
 
@@ -21,8 +21,8 @@ class Product(BaseModel):
     description = models.TextField(
         max_length=255,
         verbose_name="описание",
-        null=True,
         blank=True,
+        default="",
     )
 
     amount = models.PositiveIntegerField(
@@ -44,6 +44,7 @@ class Product(BaseModel):
     class Meta:
         db_table = "product"
         verbose_name = "товар"
+        verbose_name_plural = "товары"
         # В дополнение к валидации Python добил валидацию в БД
         constraints = [
             models.CheckConstraint(

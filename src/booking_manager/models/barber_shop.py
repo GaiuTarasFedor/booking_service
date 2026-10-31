@@ -15,22 +15,22 @@ class Barbershop(BaseModel):
     phone = models.CharField(
         max_length=255,
         verbose_name="телефон",
-        null=True,
         blank=True,
+        default="",
     )
 
     address = models.CharField(
         max_length=64,
         verbose_name="адрес",
-        null=True,
         blank=True,
+        default="",
     )
 
     description = models.TextField(
         max_length=255,
         verbose_name="описание",
-        null=True,
         blank=True,
+        default="",
     )
 
     opening_time = models.TimeField(

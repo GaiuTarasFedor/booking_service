@@ -3,12 +3,14 @@
 
 Каждое представление принимает HttpRequest и возвращает HttpResponse.
 """
+
 from django.db.models.query import Prefetch
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 from account.models import Barber
-from .data import SERVICES
 from booking_manager.models import Booking, Comment, ProductBooking
+
+from .data import SERVICES
 
 
 def home(request):
@@ -24,12 +26,9 @@ def service_list(request):
 def specialist_list(request):
     """Список специалистов, их рейтинг и комментаррии."""
     barbers = Barber.objects.select_related("user").prefetch_related(
-        Prefetch(
-        "comments", queryset=Comment.objects.select_related("client__user"))
+        Prefetch("comments", queryset=Comment.objects.select_related("client__user"))
     )
-    return render(
-        request, "booking_manager/specialists.html", {"barbers": barbers}
-    )
+    return render(request, "booking_manager/specialists.html", {"barbers": barbers})
 
 
 def booking_list(request):
@@ -45,20 +44,15 @@ def booking_new(request):
         "booking_manager/booking_new.html",
     )
 
+
 def booking_detail(request, pk):
     """Страница с деталями бронирования."""
-    booking = get_object_or_404(Booking.objects.select_related(
-            "client__user", 
-            "barber__user", 
-            "booking_service"
-            ).prefetch_related(Prefetch(
-                    "product_bookings",
-                    queryset=ProductBooking.objects.select_related("product")
-                )),
-        pk=pk
-        )
-    return render(
-        request, 
-        "booking_manager/booking_detail.html", 
-        {"booking": booking}
-        )
+    booking = get_object_or_404(
+        Booking.objects.select_related(
+            "client__user", "barber__user", "booking_service"
+        ).prefetch_related(
+            Prefetch("product_bookings", queryset=ProductBooking.objects.select_related("product"))
+        ),
+        pk=pk,
+    )
+    return render(request, "booking_manager/booking_detail.html", {"booking": booking})

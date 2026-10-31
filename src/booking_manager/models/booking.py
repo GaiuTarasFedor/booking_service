@@ -1,8 +1,7 @@
 from django.db import models
 
-from core.models import BaseModel
-
 from booking_manager.managers import BookingManager
+from core.models import BaseModel
 
 
 class Booking(BaseModel):
@@ -66,4 +65,5 @@ class Booking(BaseModel):
     class Meta:
         db_table = "bookings"
         verbose_name = "Бронирование мастера"
+        verbose_name_plural = "Бронирования мастеров"
         ordering = ["-created_at", "name"]

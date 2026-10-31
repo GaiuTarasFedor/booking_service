@@ -8,8 +8,8 @@ class Comment(BaseModel, RatingMixin):
 
     text = models.TextField(
         verbose_name="комментарий",
-        null=True,
         blank=True,
+        default="",
     )
 
     is_published = models.BooleanField(

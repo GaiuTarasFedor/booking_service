@@ -15,8 +15,8 @@ class Promotion(BaseModel):
     description = models.TextField(
         max_length=255,
         verbose_name="описание",
-        null=True,
         blank=True,
+        default="",
     )
 
     discount_percent = models.PositiveSmallIntegerField(
