@@ -1,16 +1,26 @@
-# Booking service — ДЗ №5 «Наследование моделей, оптимизация запросов, генерация данных»
+# Booking service — ДЗ №6 «Административная панель Django»
 
-Учебный проект на Django: сервис барбершопа. В ветке `dev_1` последовательно сделаны ДЗ №4 и №5.
+Учебный проект на Django: сервис барбершопа. В ветке `dev_1` последовательно сделаны ДЗ №4–№6.
 
-Что добавлено в ДЗ №5:
+Что добавлено в ДЗ №6:
+
+- все 10 моделей зарегистрированы в `admin`;
+- `BookingAdmin`: `list_display`, `list_display_links`, `list_editable`, `readonly_fields`,
+  `list_select_related`, вычисляемая стоимость товаров;
+- `ProductAdmin`: списки и массовое увеличение количества;
+- inline комментариев на странице барбера и товаров на странице брони;
+- поиск, фильтры и массовые действия для комментариев, товаров и акций.
+
+ДЗ №5:
 
 - абстрактная модель `RatingMixin` в `core` — одно поле `rating` для `Barber` и `Comment`;
 - `django-debug-toolbar`: SQL-панель и `EXPLAIN` для разбора запросов;
 - три страницы на ORM: список броней, список барберов с отзывами, детали брони по ID;
 - оптимизация запросов: `select_related`, `prefetch_related`, `Prefetch` с вложенным `select_related`;
 - кастомный менеджер `Booking` с методом `upcoming_active()` — активные брони с будущим визитом;
-- команда `generate_data` на `faker`: 100 пользователей, 15 барберов, 80 клиентов, 5 барбершопов,
-  20 услуг, 50 товаров, 500 броней, 200 отзывов, 10 акций и товары в части броней.
+- генерация данных разбита на девять идемпотентных команд `generate_*` на `faker`: 100
+  пользователей, 15 барберов, 80 клиентов, 5 барбершопов, 20 услуг, 50 товаров, 500 броней, 200
+  отзывов, 10 акций и товары в части броней.
 
 ДЗ №4: десять моделей, связи 1:1, 1:N и M:N, идемпотентный seed и десять запросов по связям.
 ДЗ №1–№3 (страницы, модель `booking`, тесты) живут в ветках `dev` и `main`.
@@ -32,8 +42,14 @@ src/
     booking_manager/          — Barbershop, Booking, BookingService, Product,
                                 ProductBooking, Comment, Promotion
                                 managers.py  — BookingManager.upcoming_active()
-                                management/commands/  — seed_hw4, generate_data,
-                                                        report_state, hw4_queries
+                                management/commands/  — seed_hw4, report_state, hw4_queries,
+                                                        generate_user, generate_barbershops,
+                                                        generate_booking_services,
+                                                        generate_product,
+                                                        generate_barbers_clients,
+                                                        generate_bookings, generate_comments,
+                                                        generate_booking_product,
+                                                        generate_promotion
                                 templates/booking_manager/  — base, home, services, specialists,
                                                               bookings, booking_detail, booking_new
 ```
@@ -91,7 +107,7 @@ src/
 
 ## Данные
 
-Две идемпотентные команды, у них разные задачи.
+Идемпотентные команды: `seed_hw4` и девять `generate_*`.
 
 **`seed_hw4`** — небольшие данные, спроектированные под границы запросов З1–З10
 (`update_or_create` по естественным ключам, всё внутри `transaction.atomic`): 8 клиентов,
@@ -100,13 +116,15 @@ src/
 входит только в неактивную акцию; у одного барбера нет отзывов; у двух броней нет товаров.
 Именно это обеспечивает ожидаемые числа З1–З10.
 
-**`generate_data`** — объёмы из ДЗ №5, собранные из констант и `faker` с фиксированным seed:
+**`generate_*`** — девять идемпотентных команд, которые вместе дают объёмы ДЗ №5:
 5 барбершопов, 20 услуг, 50 товаров, 10 акций, 100 пользователей, 15 барберов, 80 клиентов,
 500 броней, 200 отзывов и 200 позиций товаров. Ключи идемпотентности: `name` у справочников,
 `email` у пользователей, `user` у барберов и клиентов, `booking` у отзывов, пара
-«бронь + товар» у позиций. Повторный прогон ничего не создаёт.
+«бронь + товар» у позиций. Повторный прогон ничего не создаёт. Порядок запуска — по
+зависимостям: пользователи и справочники, затем барберы/клиенты, брони, комментарии, товары в
+бронях и акции.
 
-Текущее состояние после `seed_hw4` и `generate_data` (`manage.py report_state`):
+Текущее состояние после `seed_hw4` и девяти команд `generate_*` (`manage.py report_state`):
 
 | Таблица | Строк |
 |---|---|
@@ -116,7 +134,7 @@ src/
 | `booking_service` / `product` / `promotions` | 28 / 58 / 13 |
 | `bookings` / `comments` / `product_bookings` | 508 / 208 / 206 |
 
-Числа зависят от того, какие команды запускались: `generate_data` добавляет к тому, что уже есть.
+Числа зависят от того, какие команды запускались: `generate_*` добавляют к тому, что уже есть.
 На чистой базе после одного `seed_hw4` состояние соответствует таблице из ДЗ №4:
 16 / 8 / 8 / 2 / 8 / 3 / 8 / 8 / 8 / 6.
 
@@ -127,7 +145,15 @@ src/
 | `manage.py seed_hw4` | Наполняет базу справочниками, пользователями, клиентами, барберами, бронями, комментариями и товарами в бронях. Идемпотентна |
 | `manage.py report_state` | Печатает количество строк по десяти моделям |
 | `manage.py hw4_queries` | Печатает З1–З10: SQL запроса и количество строк |
-| `manage.py generate_data` | Наполняет базу объёмами ДЗ №5: 100 пользователей, 15 барберов, 80 клиентов, 5 барбершопов, 20 услуг, 50 товаров, 500 броней, 200 отзывов, 10 акций, товары в части броней. Идемпотентна |
+| `manage.py generate_user` | 100 пользователей |
+| `manage.py generate_barbershops` | 5 барбершопов |
+| `manage.py generate_booking_services` | 20 услуг |
+| `manage.py generate_product` | 50 товаров |
+| `manage.py generate_barbers_clients` | 15 барберов и 80 клиентов |
+| `manage.py generate_bookings` | 500 броней |
+| `manage.py generate_comments` | 200 отзывов |
+| `manage.py generate_booking_product` | товары в 200 бронях |
+| `manage.py generate_promotion` | 10 акций |
 
 ## Страницы
 
@@ -142,6 +168,20 @@ src/
 
 На будущие визиты ссылается кнопка `View` в списке броней: адрес строится тегом `{% url %}` с `pk`
 текущей карточки. Несуществующий id даёт 404.
+
+## Админка
+
+Все 10 моделей доступны в `/admin/`.
+
+| Модель | Что настроено |
+|---|---|
+| `Booking` | `list_display`, `list_display_links`, `list_editable`, `readonly_fields` (`created_at`, стоимость товаров), `list_select_related`, `search_fields`, `list_filter`, `ProductBookingInline` |
+| `Product` | `list_display`, `list_editable`, `search_fields`, action «увеличить количество на 10» |
+| `Barber` | `CommentInline`: автор, текст, оценка, статус; добавление комментариев отключено |
+| `Comment` | `list_filter` по оценке и публикации; actions «опубликовать»/«скрыть» |
+| `Promotion` | `list_display`; actions «активировать»/«деактивировать» |
+| `BookingService`, `Barbershop` | `list_display` и `search_fields` |
+| `User`, `Client`, `ProductBooking` | базовая регистрация без дополнительных настроек |
 
 ## Оптимизация запросов
 
@@ -202,8 +242,19 @@ Booking.objects.upcoming_active()
    ```
 5. `poetry run python src/manage.py migrate`
 6. `poetry run python src/manage.py seed_hw4`
-7. `poetry run python src/manage.py generate_data` — объёмы ДЗ №5. Первый прогон занимает около двух
-   минут: сто паролей хешируются намеренно медленно
+7. Наполнить базу объёмами ДЗ №5 — девять команд по порядку:
+   ```bash
+   poetry run python src/manage.py generate_user
+   poetry run python src/manage.py generate_barbershops
+   poetry run python src/manage.py generate_booking_services
+   poetry run python src/manage.py generate_product
+   poetry run python src/manage.py generate_barbers_clients
+   poetry run python src/manage.py generate_bookings
+   poetry run python src/manage.py generate_comments
+   poetry run python src/manage.py generate_booking_product
+   poetry run python src/manage.py generate_promotion
+   ```
+   Первый прогон занимает около двух минут: сто паролей хешируются намеренно медленно.
 8. `poetry run python src/manage.py createsuperuser`
 9. `poetry run python src/manage.py runserver` → http://127.0.0.1:8000/ и `/admin/`
 
@@ -217,12 +268,12 @@ poetry run python src/manage.py shell -c "from booking_manager.models import Boo
 ```
 
 `hw4_queries` печатает SQL и количества З1–З10. Эталон из ДЗ №4 (`2, 5, 7, 2, 1, 2, 4, 2, 2, 2`)
-относится к состоянию после одного `seed_hw4`; после `generate_data` числа будут другими — набор
+относится к состоянию после одного `seed_hw4`; после `generate_*` числа будут другими — набор
 данных вырос, это ожидаемо.
 
 ## Ограничения и примечания
 
-- Тестов для ДЗ №4–№5 нет: задания их не требуют. Тесты ДЗ №3 остались в ветках `dev`/`main`.
+- Тестов для ДЗ №4–№6 нет: задания их не требуют. Тесты ДЗ №3 остались в ветках `dev`/`main`.
 - `/services/` и `/bookings/new/` по-прежнему демонстрационные: данные берутся из `data.py`.
   Остальные страницы работают с базой.
 - `seed_hw4` передаёт `visit_time` строками, поэтому при прогоне Django пишет
@@ -233,9 +284,10 @@ poetry run python src/manage.py shell -c "from booking_manager.models import Boo
 - `ProductBooking.id` — `UUIDField` вместо `BigAutoField` с диаграммы: сделано осознанно, чтобы
   отработать нестандартный первичный ключ.
 - M2M `Product.bookings` не используется: связь товара и брони выражена через `ProductBooking`.
-- `generate_data` добавляет данные к существующим. Абсолютные числа задания (100 пользователей,
-  15 барберов, 80 клиентов, 5 барбершопов, 20 услуг, 50 товаров, 500 броней, 200 отзывов, 10 акций)
-  проверяются на чистой базе; на заполненной — по приросту через `report_state` до и после.
+- Девять команд `generate_*` добавляют данные к существующим. Абсолютные числа задания (100
+  пользователей, 15 барберов, 80 клиентов, 5 барбершопов, 20 услуг, 50 товаров, 500 броней, 200
+  отзывов, 10 акций) проверяются на чистой базе; на заполненной — по приросту через
+  `report_state` до и после.
 - На машине может быть несколько кластеров PostgreSQL с одинаковым именем базы. Перед работой
   полезно проверить, к какому подключено приложение:
   `select version(), current_database();`.
