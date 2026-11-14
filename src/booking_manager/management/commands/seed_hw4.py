@@ -1,17 +1,24 @@
 from datetime import datetime
+from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
-from decimal import Decimal
-
-from account.models.user import User
 from account.constants import ClientStatusChoices
-from account.models.client import Client
 from account.models.barber import Barber
-from ...models import Barbershop, BookingService, Product, Promotion, Booking, Comment, ProductBooking
+from account.models.client import Client
+from account.models.user import User
 
+from ...models import (
+    Barbershop,
+    Booking,
+    BookingService,
+    Comment,
+    Product,
+    ProductBooking,
+    Promotion,
+)
 
 BARBERSHOP = [
     {
@@ -150,7 +157,6 @@ PRODUCT = [
         "amount": 17,
         "price": Decimal("10"),
     },
-
 ]
 
 PROMOTION = [
@@ -586,8 +592,6 @@ PRODUCT_BOOKINGS = [
         "total_price": Decimal("10.00"),
     },
 ]
-
-
 
 
 class Command(BaseCommand):

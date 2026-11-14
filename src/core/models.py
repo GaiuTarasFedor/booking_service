@@ -2,7 +2,6 @@ from django.db import models
 
 
 class BaseModel(models.Model):
-
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="дата создания",
@@ -16,8 +15,8 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class RatingMixin(models.Model):
 
+class RatingMixin(models.Model):
     rating = models.PositiveSmallIntegerField(
         verbose_name="рейтинг",
         null=True,

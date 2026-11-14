@@ -1,7 +1,13 @@
 from django.core.management.base import BaseCommand
 
-from account.models import User, Client, Barber, barber
-from booking_manager.models import Barbershop, BookingService, Product, Promotion, Booking, Comment, ProductBooking
+from account.models import Barber
+from booking_manager.models import (
+    Barbershop,
+    Booking,
+    BookingService,
+    Comment,
+    Product,
+)
 
 
 class Command(BaseCommand):
@@ -57,6 +63,8 @@ class Command(BaseCommand):
         self.stdout.write(f"{qs.count()}")
 
         # брони с `product_bookings__product__name="Шампунь"` __и__ `barber__experience_year__gt=3`
-        qs = Booking.objects.filter(product_bookings__product__name="Шампунь", barber__experience_year__gt=3).distinct()
+        qs = Booking.objects.filter(
+            product_bookings__product__name="Шампунь", barber__experience_year__gt=3
+        ).distinct()
         self.stdout.write(f"{qs.query}")
         self.stdout.write(f"{qs.count()}")

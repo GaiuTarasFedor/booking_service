@@ -1,7 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.db import models
-
 from django.contrib.auth.hashers import make_password
+from django.db import models
 
 
 class UserQuerySet(models.QuerySet):
@@ -34,5 +33,3 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)  # только если ключа нет
         extra_fields.setdefault("is_superuser", True)  # только если ключа нет
         return self._create_user(email, password, **extra_fields)
-
-

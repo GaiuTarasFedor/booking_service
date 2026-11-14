@@ -1,21 +1,16 @@
 import uuid
 
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
 
 from core.models import BaseModel
 
 
 class ProductBooking(BaseModel):
-    """Класс (таблица) для хранения информации о продуктах, используемых в определенном бронировании."""
+    """Класс (таблица) для хранения информации о продуктах в бронировании."""
 
     # решил создать свой id, не по умолчанию
-    id = models.UUIDField(
-        verbose_name="id",
-        default=uuid.uuid4,
-        primary_key=True,
-        editable=False
-    )
+    id = models.UUIDField(verbose_name="id", default=uuid.uuid4, primary_key=True, editable=False)
 
     product = models.ForeignKey(
         to="Product",
@@ -48,6 +43,7 @@ class ProductBooking(BaseModel):
     class Meta:
         db_table = "product_bookings"
         verbose_name = "товары в бронировании"
+        verbose_name_plural = "товары в бронировании"
         constraints = [
             models.CheckConstraint(
                 condition=models.Q(total_price__gte=0),
@@ -55,6 +51,7 @@ class ProductBooking(BaseModel):
                 violation_error_message="Итоговая цена не может быть меньше 0.",
             )
         ]
+
     ordering = ["created_at", "quantity"]
 
     def __str__(self):

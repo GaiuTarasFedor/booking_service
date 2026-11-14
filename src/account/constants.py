@@ -6,4 +6,3 @@ class ClientStatusChoices(models.TextChoices):
     MIDL = "midl", "ученик"
     EXPERT = "expert", "експерт"
     LEGENDA = "legenda", "легенда"
-

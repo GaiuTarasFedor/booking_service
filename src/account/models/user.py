@@ -12,29 +12,29 @@ class User(AbstractUser, BaseModel):
         max_length=64,
         verbose_name="имя пользователя",
         # unique=True,
-        null=True,
         blank=True,
+        default="",
     )
 
     phone = models.CharField(
         max_length=64,
         verbose_name="телефон",
-        null=True,
         blank=True,
+        default="",
     )
 
     first_name = models.CharField(
         max_length=64,
         verbose_name="имя",
-        null=True,
         blank=True,
+        default="",
     )
 
     last_name = models.CharField(
         max_length=64,
         verbose_name="фамилия",
-        null=True,
         blank=True,
+        default="",
     )
 
     is_staff = models.BooleanField(

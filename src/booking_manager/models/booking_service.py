@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
 
 from booking_manager.constants import CategoryChoices
 from core.models import BaseModel
@@ -30,8 +30,8 @@ class BookingService(BaseModel):
     description = models.TextField(
         max_length=255,
         verbose_name="описание",
-        null=True,
         blank=True,
+        default="",
     )
 
     price = models.DecimalField(
@@ -55,6 +55,7 @@ class BookingService(BaseModel):
     class Meta:
         db_table = "booking_service"
         verbose_name = "услуга"
+        verbose_name_plural = "услуги"
         # В дополнение к валидации Python добавил валидацию в БД
         constraints = [
             models.CheckConstraint(
